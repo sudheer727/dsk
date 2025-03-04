@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Booking</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .green { color: green; font-weight: bold; }
+        .red { color: red; font-weight: bold; }
+        .container { max-width: 600px; margin: auto; }
+        .search-box input, .search-box select { width: 100%; padding: 8px; margin: 5px 0; }
+        .buttons { margin: 15px 0; }
+        .buttons button { padding: 10px; margin: 5px; }
+        .vehicle-entry { padding: 10px; border-bottom: 1px solid #ddd; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Available Vehicles</h2>
+
+    <div class="buttons">
+        <button onclick="window.location.href='register.html'">Register</button>
+        <button onclick="window.location.href='update.html'">Update</button>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by Name" oninput="filterVehicles()">
+        <input type="date" id="searchDate" onchange="filterVehicles()">
+        <input type="time" id="searchStartTime" onchange="filterVehicles()">
+        <input type="time" id="searchEndTime" onchange="filterVehicles()">
+    </div>
+
+    <div class="container" id="vehicleList"></div>
+
+    <script>
+        function getDayName(dateString) {
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            return days[new Date(dateString).getDay()];
+        }
+
+        function showBookingForm(index) {
+            document.getElementById(`booking-form-${index}`).classList.toggle("hidden");
+        }
+
+        function showConfirmBox(index, name) {
+            if (confirm(`Confirm booking for ${name}?`)) {
+                confirmBooking(index, name);
+            }
+        }
+
+        function showCancelBox(index, name) {
+            if (confirm(`Cancel booking request for ${name}?`)) {
+                cancelBooking(index, name);
+            }
+        }
+
+        function showDeleteBox(index, name) {
+            if (confirm(`Delete confirmed booking for ${name}?`)) {
+                deleteConfirmedBooking(index, name);
+            }
+        }
+
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

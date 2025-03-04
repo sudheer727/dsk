@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Booking - Login</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #error-msg { color: red; }
+    </style>
+    
+</head>
+<body>
+    
+    <h2>Enter Password</h2>
+    <input type="password" id="password">
+    <button onclick="checkPassword()">Login</button>
+    <p id="error-msg"></p>
+
+    <script>
+        function checkPassword() {
+            let password = document.getElementById("password").value;
+            if (password === "ctpl") {
+                window.location.href = "main.html";
+            } else {
+                document.getElementById("error-msg").innerText = "Incorrect password!";
+            }
+        }
+    </script>
+    <script src="script.js"></script>
+
+</body>
+</html>

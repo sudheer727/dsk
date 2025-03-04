@@ -1,0 +1,100 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #303030;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #333;
+    margin: 20px 0;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* Buttons */
+.buttons {
+    margin: 15px 0;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:nth-child(1) { background: #007bff; color: white; } /* Register */
+button:nth-child(2) { background: #28a745; color: white; } /* Update */
+button:nth-child(3) { background: #dc3545; color: white; } /* Call */
+button:nth-child(4) { background: #ff9800; color: white; } /* Edit */
+
+/* Search Filters */
+.search-box {
+    margin: 15px 0;
+}
+
+.search-box input {
+    width: 95%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Vehicle List */
+.vehicle-entry {
+    background: #fff;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.vehicle-entry p {
+    margin: 0;
+    padding: 0;
+}
+
+.green {
+    color: green;
+    font-weight: bold;
+}
+
+.red {
+    color: red;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+}

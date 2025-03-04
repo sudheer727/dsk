@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { max-width: 400px; margin: auto; }
+        input, select { width: 100%; padding: 8px; margin: 5px 0; }
+        button { padding: 10px; margin-top: 10px; cursor: pointer; }
+        #update-section, #otp-section, #forgot-section { display: none; }
+    </style>
+</head>
+<body>
+    <h2>Update Details</h2>
+
+    <div class="container">
+        <!-- Login Verification -->
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <div style="display: flex; justify-content: space-between;">
+            <button onclick="verifyUser()">Verify</button>
+            <button style="background-color: red; color: white;" onclick="deleteProfile()">Delete Profile</button>
+        </div>
+        <p id="forgot-password"><a href="#" onclick="showForgotSection()">Forgot Password?</a></p>
+
+        <!-- Forgot Password & OTP Section -->
+        <div id="forgot-section">
+            <input type="text" id="forgot-username" placeholder="Enter Username">
+            <select id="forgot-countryCode">
+                <option value="+91">+91 (India)</option>
+                <option value="+1">+1 (USA)</option>
+                <option value="+44">+44 (UK)</option>
+                <option value="+61">+61 (Australia)</option>
+                <option value="+81">+81 (Japan)</option>
+                <option value="+49">+49 (Germany)</option>
+            </select>
+            <input type="text" id="forgot-phone" placeholder="Enter Registered Phone Number">
+            <button onclick="sendOTP()">Send OTP</button>
+        </div>
+
+        <div id="otp-section">
+            <p>Enter OTP sent to your phone:</p>
+            <input type="text" id="otp" placeholder="Enter OTP">
+            <button onclick="verifyOTP()">Verify OTP</button>
+        </div>
+
+        <!-- Update Details Section -->
+        <div id="update-section">
+            <input type="text" id="newUsername" placeholder="New Username">
+            <input type="password" id="newPassword" placeholder="New Password">
+            <select id="countryCode">
+                <option value="+91">+91 (India)</option>
+                <option value="+1">+1 (USA)</option>
+                <option value="+44">+44 (UK)</option>
+                <option value="+61">+61 (Australia)</option>
+                <option value="+81">+81 (Japan)</option>
+                <option value="+49">+49 (Germany)</option>
+            </select>
+            <input type="text" id="phone" inputmode="numeric" pattern="[0-9]*" placeholder="Enter Phone Number">
+            <button onclick="updateDetails()">Update</button>
+        </div>
+    </div>
+
+    <script>
+       // let verifiedUsername = ""; // Stores the username verified via OTP
+        let users = JSON.parse(localStorage.getItem("users")) || []; // Retrieve users
+        let storedOTP = ""; // Global variable to store OTP
+        let isOTPVerified = false; // Flag to track OTP verification
+        let isPasswordVerified = false; // Flag to track login verification
+        let otpVerifiedPhone = "";  // Store the phone number used for OTP verification
+
+
+        function verifyUser() {
+            let username = document.getElementById("username").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let userIndex = users.findIndex(u => u.username === username && u.password === password);
+
+            if (userIndex !== -1) {
+                document.getElementById("update-section").style.display = "block";
+                document.getElementById("forgot-password").style.display = "none";
+                document.getElementById("forgot-section").style.display = "none";
+                document.getElementById("otp-section").style.display = "none";
+
+                document.getElementById("newUsername").value = users[userIndex].username;
+                document.getElementById("newPassword").value = users[userIndex].password;
+
+                let phoneNumber = users[userIndex].phone;
+                let countryCode = phoneNumber.slice(0, phoneNumber.length - 10);
+                document.getElementById("countryCode").value = countryCode;
+                document.getElementById("phone").value = phoneNumber.replace(countryCode, '');
+
+                document.getElementById("username").disabled = true;
+                document.getElementById("password").disabled = true;
+
+                isPasswordVerified = true;
+            } else {
+                alert("Invalid credentials!");
+                location.reload();
+            }
+        }
+
+        function deleteProfile() {
+            let username = document.getElementById("username").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let userIndex = users.findIndex(u => u.username === username && u.password === password);
+
+            if (userIndex === -1) {
+                alert("Invalid username or password!");
+                return;
+            }
+
+            if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
+                users.splice(userIndex, 1);
+                localStorage.setItem("users", JSON.stringify(users));
+                alert("Profile deleted successfully!");
+                window.location.href = "main.html";
+            }
+        }
+
+        function showForgotSection() {
+            document.getElementById("forgot-section").style.display = "block";
+            document.getElementById("otp-section").style.display = "none";
+        }
+
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+        }
+
+        function sendOTP() {
+            let username = document.getElementById("forgot-username").value.trim();
+            let phoneNumber = document.getElementById("forgot-phone").value.trim();
+            let countryCode = document.getElementById("forgot-countryCode").value;
+            let fullPhoneNumber = countryCode + phoneNumber;
+
+            let userIndex = users.findIndex(u => u.username === username);
+
+            if (userIndex !== -1 && users[userIndex].phone === fullPhoneNumber) {
+                storedOTP = generateOTP(); 
+                document.getElementById("otp-section").style.display = "block";
+                alert(`OTP sent successfully! (Simulated OTP: ${storedOTP})`);
+            } else {
+                alert("Username or phone number incorrect!");
+            }
+        }
+
+        function verifyOTP() {
+    let enteredOTP = document.getElementById("otp").value.trim();
+
+    if (enteredOTP === storedOTP) { 
+        isOTPVerified = true;
+        verifiedUsername = document.getElementById("forgot-username").value.trim(); // Store verified username
+        console.log("Verified Username:", verifiedUsername); // Debugging line
+        alert("OTP Verified! You can now update your details.");
+        document.getElementById("update-section").style.display = "block";
+    } else {
+        alert("Incorrect OTP! Please try again.");
+    }
+}
+
+    </script>
+        <script src="script.js"></script>
+
+</body>
+</html>
